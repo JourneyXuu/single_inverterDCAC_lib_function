@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "iic.h": "c",
+        "f2806x_device.h": "c",
+        "oledfont.h": "c"
+    }
+}
