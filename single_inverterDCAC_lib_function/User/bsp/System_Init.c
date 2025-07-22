@@ -15,13 +15,18 @@
 //#pragma CODE_SECTION(AdcISR, "ramfuncs");
 
 /*****************************************************************************
-* ??    ??:void SysCtrlInit(void)
- * ??    ??: ?????????????????
- *?????????
- *      PLL????SYSCLKOUT = 60Mhz??
- *      EPWM1~5 ???????ADC???????
- *      HALT?????????????????1??????????
-*****************************************************************************/
+ * Function Name: void SysCtrl_Init(void)
+ * Description:   Initializes the system control module, including disabling the watchdog timer,
+ *                configuring ADC calibration, setting up the internal oscillator and PLL clock,
+ *                and initializing peripheral clocks.
+ *
+ * Configuration Details:
+ *                - Disables the watchdog timer to prevent unexpected resets
+ *                - Enables ADC clock and performs ADC calibration for accurate conversions
+ *                - Selects internal oscillator as the clock source and configures PLL to achieve
+ *                  a system clock (SYSCLKOUT) of 60 MHz
+ *                - Initializes peripheral clocks to prepare for module-specific operations
+ *****************************************************************************/
 void SysCtrl_Init(void)
 {
     DisableDog();
@@ -69,27 +74,23 @@ void Function_Module_Init(void)
     OLED_Refresh();//更新显示
     //DMA_Init();
     ADCTrig();
-    ADC_Init();//?????????????ADC DMA
-    //UART_Init(115200);//9600
-    /*?????????*/
-    //SVPWM_INIT(&SVPWM_Handle);
-//    SOGI_Init();
+    ADC_Init();              // Initialize ADC module and configure for DMA operation
+    // UART_Init(115200);    // Optional: Initialize UART with baud rate of 115200 (currently disabled)
+    /* Module initialization section */
+    // SVPWM_INIT(&SVPWM_Handle);  // Optional: Initialize SVPWM control (currently disabled)
+    // SOGI_Init();               // Optional: Initialize SOGI filter (currently disabled)
 
 
-    /*?????卸????*/
-    //EALLOW;
-    //PieCtrlRegs.PIEIER1.bit.INTx7 = 1;//timer 0 ?卸?
-    //EDIS;
-    // Enable ADCINT1 in PIE
-    PieCtrlRegs.PIEIER1.bit.INTx1 = 1;   // Enable INT 1.1 in the PIE
-    IER |= M_INT1;
-    PieCtrlRegs.PIEACK.all = 0xFFFF;//???????卸?
-    //ADC/TIM0  TIM1
-    //IER |= M_INT1 | M_INT13;//????卸??
+    /* Configure PIE interrupt for ADC and CPU interrupt enable */
+    // Enable ADC interrupt INT1.1 in PIE (commented out line was for Timer 0)
+    PieCtrlRegs.PIEIER1.bit.INTx1 = 1;   // Enable ADC EOC interrupt (INT1.1)
+    IER |= M_INT1;                       // Enable CPU interrupt INT1
+    PieCtrlRegs.PIEACK.all = 0xFFFF;     // Acknowledge all PIE interrupts to clear any pending flags
+    // Note: Other interrupts like Timer 0 or INT13 are not enabled in this configuration
     EINT;
     ERTM;
 
-    /*??????????*/
+    /* Start CPU Timer 0 and Timer 1 */
     CpuTimer0Regs.TCR.bit.TSS = 0;
     CpuTimer1Regs.TCR.bit.TSS = 0;
     EALLOW;
