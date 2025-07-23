@@ -58,9 +58,9 @@ typedef ADC_Get_Value *ADC_Get_handle;
                                           (void (*)(Uint32))F2833X_VdcEIbus_drv_read  \
                                          }
 										 */
-#define ADC_Get_Value_DEFAULTS   { 30.093,50.193,0,             \
-                                          23.193,0.6217,0,             \
-                                          5.463,9.0143,0,             \
+#define ADC_Get_Value_DEFAULTS   { 36.882,60.084,0,             \
+                                          23.842,0.097,0,             \
+                                          7.2168,11.967,0,             \
                                           (void (*)(Uint32))ADC_Get_Value_calc  \
                                          }
 

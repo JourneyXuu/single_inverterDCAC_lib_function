@@ -114,6 +114,8 @@
        RAMPGEN rampgen2=RAMPGEN_DEFAULTS;  //模拟正余弦发生器
 
        volatile float temp1[200];
+       volatile float temp2[200];
+       volatile float temp3[200];
 
        volatile float rate ;
        volatile float temp_vdc = 25;
@@ -555,7 +557,10 @@ if(AdcRegs.ADCINTFLG.bit.ADCINT1)//产生了ADC1中断
     if(Watch_count==200)
     Watch_count=0;
 
-    temp1[Watch_count]=(float)(sogi1.u_base);//EabMeas//VdcMeas//IaMeas//filter1.out//VdcMeas//sogi1.u_baserampgen1.Sine//sogi2.u_base//ADC_Get_Value1.IaMeas
+//    temp1[Watch_count]=(float)(sogi1.u_base);//EabMeas//VdcMeas//IaMeas//filter1.out//VdcMeas//sogi1.u_baserampgen1.Sine//sogi2.u_base//ADC_Get_Value1.IaMeas
+    temp1[Watch_count]=(float)(ADC_Get_Value1.EabMeas);
+    temp2[Watch_count]=(float)(ADC_Get_Value1.VdcMeas);
+    temp3[Watch_count]=(float)(ADC_Get_Value1.IaMeas);
     //temp2[Watch_count]=(float)(Ang);
     // temp[2][Watch_count]=(float)(rampgen2.Sine);
  if (Button_flag!=1)
