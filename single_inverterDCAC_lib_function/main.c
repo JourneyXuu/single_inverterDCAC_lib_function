@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "System_Init.h"
 #include "EPWM.h"
+#include <math.h>
 //#include "SCI.h"
 #include "SOGI.h"
 #include "ADC_Get_Value.h"
@@ -24,7 +25,7 @@
 
     float32 P_ref=1000;
     float32 Q_ref=0;
-    float32 V_ref=15;
+    float32 V_ref=23;
 
     float32 V_mod=0;
 
@@ -101,6 +102,7 @@
 
 
       LOW_PASS_FILTER filter1=LOW_PASS_FILTER_DEFAULTS;
+      LOW_PASS_FILTER filter2=LOW_PASS_FILTER_DEFAULTS;
       LOW_PASS_FILTER P_filter=LOW_PASS_FILTER_DEFAULTS;
       LOW_PASS_FILTER Q_filter=LOW_PASS_FILTER_DEFAULTS;
 
@@ -154,8 +156,8 @@ void main(void)
     rampgen2.Umax=155.540*0.2;
     rampgen2.T_step=1;
 
-        pid1[0].Kp=_IQ(0.02); //PI调节器比例系数
-        pid1[0].Ki=_IQ(T/0.05); //T/PI调节器积分系数 原T/(Kp/KI)
+        pid1[0].Kp=_IQ(0.035); //PI调节器比例系数
+        pid1[0].Ki=_IQ(T/0.008); //T/PI调节器积分系数 原T/(Kp/KI)
         pid1[0].Kd=_IQ(0/T); //PI调节器微分系�/T
         pid1[0].Kc=_IQ(0); //PI调骰中Ｕ凳�
         pid1[0].OutMax=_IQ(3); //PI调节器舷�
@@ -164,8 +166,8 @@ void main(void)
         pid1[0].OutMin1=_IQ(-3);
 
        //Q_Current
-        pid1[4].Kp=_IQ(0.02); //PI调节器比例系数
-        pid1[4].Ki=_IQ(T/0.05); //T/PI调节器分系数0.088
+        pid1[4].Kp=_IQ(0.035); //PI调节器比例系数
+        pid1[4].Ki=_IQ(T/0.008); //T/PI调节器分系数0.088
         pid1[4].Kd=_IQ(0/T); //PI调节器微分系数/T
         pid1[4].Kc=_IQ(0); //PI调节中５�?
         pid1[4].OutMax=_IQ(3); //PI调节器上限
@@ -206,6 +208,10 @@ void main(void)
        filter1.K1=_IQdiv(_IQ(tao),(_IQ(tao)+_IQ(T)));
        filter1.K2=_IQdiv(_IQ(T),(_IQ(tao)+_IQ(T)));
 
+       tao=0.003;
+       filter1.K1=_IQdiv(_IQ(tao),(_IQ(tao)+_IQ(T)));
+       filter1.K2=_IQdiv(_IQ(T),(_IQ(tao)+_IQ(T)));
+
 
     while(1)
     {
@@ -226,7 +232,7 @@ void main(void)
 //            OLED_ShowFNum(33,0,ADC_Get_Value1.EabMeas,16,1);
 //            OLED_ShowFNum(33,16,ADC_Get_Value1.VdcMeas,16,1);
 //            OLED_ShowFNum(33,32,ADC_Get_Value1.IaMeas,16,1);
-            OLED_ShowFloat(33,0,ADC_Get_Value1.EabMeas,16,1);
+            OLED_ShowFloat(33,0,filter2.out,16,1);
             OLED_ShowFloat(33,16,ADC_Get_Value1.VdcMeas,16,1);
             OLED_ShowFloat(33,32,ADC_Get_Value1.IaMeas,16,1);
             OLED_Refresh();//更新显示
@@ -261,9 +267,12 @@ void main(void)
 
         if (key3_flag[0]==0 && key3_flag[1]==0 && key3_flag[2]==1 && key3_flag[3]==1)
         {
+            V_ref=V_ref+2;
             Idref=Idref+0.1;
             if (Idref>3)
               {Idref=3;}
+            if (V_ref>28)
+              {V_ref=28;}
         }
 
         key4_flag[3]=key4_flag[2];
@@ -273,8 +282,11 @@ void main(void)
 
         if (key4_flag[0]==0 && key4_flag[1]==0 && key4_flag[2]==1 && key4_flag[3]==1)
         {Idref=Idref-0.1;
+        V_ref=V_ref-2;
             if (Idref<0.1)
                 {Idref=0.1;}
+            if (V_ref<16)
+                {V_ref=16;}
         }
     }
 
@@ -296,19 +308,19 @@ interrupt void AdcISR(void)
 if(AdcRegs.ADCINTFLG.bit.ADCINT1)//产生了ADC1中断
 {
      ADC_Get_Value1.calc(&ADC_Get_Value1);
-//     if (ADC_Get_Value1.IaMeas>4 || ADC_Get_Value1.IaMeas<-4 || ADC_Get_Value1.VdcMeas >50 || ADC_Get_Value1.VdcMeas <25)//
-////     //if (key1_test>10 || key1_test<-10)
-//     {
-//         Overcurrent_flag++;
-//         if (Overcurrent_flag>2)
-//         {
-//         //GpioDataRegs.GPADAT.bit.GPIO8=0;
-//         PWMDis_SS();
-//         Button_flag=2;
-//         Overcurrent_flag=0;
-//         key4_test=1;
-//         }
-//     }
+     if (ADC_Get_Value1.EabMeas>35 || ADC_Get_Value1.EabMeas<-35 || ADC_Get_Value1.IaMeas>4 || ADC_Get_Value1.IaMeas<-4 || ADC_Get_Value1.VdcMeas >50 || ADC_Get_Value1.VdcMeas <25)//
+//     //if (key1_test>10 || key1_test<-10)
+     {
+         Overcurrent_flag++;
+         if (Overcurrent_flag>2)
+         {
+         //GpioDataRegs.GPADAT.bit.GPIO8=0;
+         PWMDis_SS();
+         Button_flag=2;
+         Overcurrent_flag=0;
+         key4_test=1;
+         }
+     }
 
 //         rampgen2.calc(&rampgen2);
         if (Ud>200) {Ud=0;}
@@ -334,25 +346,28 @@ if(AdcRegs.ADCINTFLG.bit.ADCINT1)//产生了ADC1中断
         {FLL1.we=290;}
         if(FLL1.we>345)
         {FLL1.we=345;}
-        sogi1.we=FLL1.we;//100*PI;//
+        sogi1.we=100*PI;//FLL1.we;//
 
+        Umag=sqrt(sogi1.qu_base* sogi1.qu_base + sogi1.u_base * sogi1.u_base);
+        filter2.in= Umag;
+        filter2.calc(filter2);
 
         sogi2.u=ADC_Get_Value1.IaMeas;//ADC_Get_Value1.EabMeas
         sogi2.calc(&sogi2);
-        sogi2.we=FLL1.we;//100*PI;//
+        sogi2.we=100*PI;//FLL1.we;//
 
         // PLL
         pid1[1].Ref = park[1].Qs;                //需要得到的正序Uq
         pid1[1].Fdb = 0;
         pid1[1].calc(&pid1[1]);
-            Ang1 = 314.1592654 + pid1[1].Out;
+            Ang1 = 100*PI;// + pid1[1].Out;
             Ang = Ang + Ang1 * T;
             if(Ang > 6.283185308)
             {Ang -= 6.283185308;}
             else if(Ang < -6.283185308)
             {Ang += 6.283185308;}
         // 网侧相电压park变换
-             park[1].Alpha = sogi1.u_base;;//
+             park[1].Alpha = sogi1.u;//_base;
              park[1].Beta = sogi1.qu_base;
              park[1].Angle = Ang;
              park[1].calc(&park[1]);
@@ -360,49 +375,7 @@ if(AdcRegs.ADCINTFLG.bit.ADCINT1)//产生了ADC1中断
 
       if (Button_flag==1)
           {
-        /*
-        //SOGI 运算
-    //
-               //   并网 并网
-               sogi1.u=-ADC_Get_Value1.EabMeas;//rampgen1.Sine;//ADC_Get_Value1.EabMeas
-               sogi1.calc(&sogi1);
-               FLL1.qu=sogi1.qu_base;
-               FLL1.delta_u=sogi1.delta_u;//-filter1.out;
-               FLL1.calc(&FLL1);
-               if (FLL1.we<270)
-               {
-                   FLL1.we=270;
-               }
-               if (FLL1.we>350)
-               {
-                   FLL1.we=350;
-                }
-               sogi1.we=FLL1.we;
 
-               sogi2.u=-ADC_Get_Value1.IaMeas;//ADC_Get_Value1.EabMeas
-               sogi2.calc(&sogi2);
-               sogi2.we=FLL1.we;
-
-               // PLL
-               pid1[1].Ref = park[1].Qs;                //需要得到的正序Uq
-               pid1[1].Fdb = 0;
-               pid1[1].calc(&pid1[1]);
-                   Ang1 = 314.1592654 + pid1[1].Out;
-                   Ang2 = Ang2 + Ang1 * T;
-                   if(Ang2 > 6.283185308)
-                   {Ang2 -= 6.283185308;}
-                   Ang=Ang2+K_ang*PI;
-                   if(Ang > 6.283185308)
-                     {Ang -= 6.283185308;}
-                   //else if(Ang < 0)
-                   //{Ang += 6.283185308;}
-               // 网侧相电压park变换
-                    park[1].Alpha = sogi1.u_base;
-                    park[1].Beta = sogi1.qu_base;
-                    park[1].Angle = Ang;
-                    park[1].calc(&park[1]);
-                    //
-*/
         // 等待锁相完成
              if(RunFlag == 0)
              {
@@ -444,12 +417,12 @@ if(AdcRegs.ADCINTFLG.bit.ADCINT1)//产生了ADC1中断
                   // d电压PI
 
                   // d轴PI
-                       pid1[2].Ref=Idref;//pid1[0].Out;//pid1[0].Out;//0.7;//
+                       pid1[2].Ref=pid1[0].Out;//Idref;//pid1[0].Out;//0.7;//
                        pid1[2].Fdb=park[2].Ds;
                        pid1[2].calc(&pid1[2]);
 
                   // q轴PI
-                       pid1[3].Ref= 0;//pid1[4].Out;//pid1[4].Out;//0;
+                       pid1[3].Ref= pid1[4].Out;//0;//pid1[4].Out;//0;
                        pid1[3].Fdb=park[2].Qs;
                        pid1[3].calc(&pid1[3]);
 

@@ -110,6 +110,7 @@ void PWMEn(void)
     GpioCtrlRegs.GPAMUX1.bit.GPIO0  =   1;// GPIO0 <-> EPWM1A
     GpioCtrlRegs.GPADIR.bit.GPIO0   =   1;// GPIO0 <-> EPWM1A
     GpioDataRegs.GPACLEAR.bit.GPIO0 =   1;// GPIO0 <-> EPWM1A
+
     GpioCtrlRegs.GPAMUX1.bit.GPIO1  =   1;// GPIO1 <-> EPWM1B
     GpioCtrlRegs.GPADIR.bit.GPIO1   =   1;// GPIO1 <-> EPWM1B
     GpioDataRegs.GPACLEAR.bit.GPIO1 =   1;// GPIO1 <-> EPWM1B
@@ -117,6 +118,7 @@ void PWMEn(void)
     GpioCtrlRegs.GPAMUX1.bit.GPIO2  =   1;// GPIO2 <-> EPWM2A
     GpioCtrlRegs.GPADIR.bit.GPIO2   =   1;// GPIO2 <-> EPWM2A
     GpioDataRegs.GPACLEAR.bit.GPIO2 =   1;// GPIO2 <-> EPWM2A
+
     GpioCtrlRegs.GPAMUX1.bit.GPIO3  =   1;// GPIO3 <-> EPWM2B
     GpioCtrlRegs.GPADIR.bit.GPIO3   =   1;// GPIO3 <-> EPWM2B
     GpioDataRegs.GPACLEAR.bit.GPIO3 =   1;// GPIO3 <-> EPWM2B

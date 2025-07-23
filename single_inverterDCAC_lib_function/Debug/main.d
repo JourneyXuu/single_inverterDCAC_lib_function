@@ -63,6 +63,9 @@ main.obj: C:/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/machi
 main.obj: C:/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/sys/_stdint.h
 main.obj: D:/A_Project/DSP_Project/Source/single_inverterDCAC_lib_function/single_inverterDCAC_lib_function/old_include/System_Init.h
 main.obj: D:/A_Project/DSP_Project/Source/single_inverterDCAC_lib_function/single_inverterDCAC_lib_function/old_include/EPWM.h
+main.obj: C:/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/math.h
+main.obj: C:/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/_defs.h
+main.obj: C:/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/machine/_limits.h
 main.obj: D:/A_Project/DSP_Project/Source/single_inverterDCAC_lib_function/single_inverterDCAC_lib_function/old_include/ADC_Get_Value.h
 main.obj: D:/A_Project/DSP_Project/Source/single_inverterDCAC_lib_function/single_inverterDCAC_lib_function/User/Device/OLED/OLED.h
 main.obj: D:/A_Project/DSP_Project/Source/single_inverterDCAC_lib_function/single_inverterDCAC_lib_function/User/Device/IIC/IIC.h
@@ -194,6 +197,12 @@ C:/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/sys/_stdint.h:
 D:/A_Project/DSP_Project/Source/single_inverterDCAC_lib_function/single_inverterDCAC_lib_function/old_include/System_Init.h:
 
 D:/A_Project/DSP_Project/Source/single_inverterDCAC_lib_function/single_inverterDCAC_lib_function/old_include/EPWM.h:
+
+C:/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/math.h:
+
+C:/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/_defs.h:
+
+C:/ti/ccs1281/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include/machine/_limits.h:
 
 D:/A_Project/DSP_Project/Source/single_inverterDCAC_lib_function/single_inverterDCAC_lib_function/old_include/ADC_Get_Value.h:
 

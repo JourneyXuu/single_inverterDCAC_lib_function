@@ -97,6 +97,7 @@ void Function_Module_Init(void)
     SysCtrlRegs.PCLKCR0.bit.TBCLKSYNC = 1;
     EDIS;
 }
+
 void MemCopy(Uint16 *SourceAddr, Uint16* SourceEndAddr, Uint16* DestAddr)
 {
     while(SourceAddr < SourceEndAddr)
