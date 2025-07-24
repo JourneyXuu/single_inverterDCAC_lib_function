@@ -7,7 +7,7 @@
 
 void ADC_Get_Value_calc(ADC_Get_Value *p)
 {
-    //Êä³öµçÁ÷  Êä³öµçÑ¹  »¬¶¯±ä×èÆ÷
+    //è¾“å‡ºç”µæµ  è¾“å‡ºç”µå‹  æ»‘åŠ¨å˜é˜»å™¨
     int16 DatQ15;
            //Uint16 Dat;
     float Tmp1;
