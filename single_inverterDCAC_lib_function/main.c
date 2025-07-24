@@ -12,6 +12,8 @@
 #include "stdio.h"
 #pragma CODE_SECTION(AdcISR,"ramfuncs");
 
+#define ADC_DEBUG 1
+
     interrupt void AdcISR(void);
 /* extern parameter define start*/
     float32 Ud=_IQ(150);        //鐩存祦缁欏畾鐢靛帇
@@ -308,39 +310,40 @@ interrupt void AdcISR(void)
 if(AdcRegs.ADCINTFLG.bit.ADCINT1)//浜х敓浜咥DC1涓柇
 {
      ADC_Get_Value1.calc(&ADC_Get_Value1);
-/*******************On-Grid-Protect Start****************************************/
-//     if (ADC_Get_Value1.EabMeas>35 || ADC_Get_Value1.EabMeas<-35 || ADC_Get_Value1.IaMeas>4 || ADC_Get_Value1.IaMeas<-4 || ADC_Get_Value1.VdcMeas >50 || ADC_Get_Value1.VdcMeas <25)//
-////     //if (key1_test>10 || key1_test<-10)
-//     {
-//         Overcurrent_flag++;
-//         if (Overcurrent_flag>2)
-//         {
-//         //GpioDataRegs.GPADAT.bit.GPIO8=0;
-//         PWMDis_SS();
-//         Button_flag=2;
-//         Overcurrent_flag=0;
-//         key4_test=1;
-//         }
-//     }
-/*******************On-Grid-Protect Start****************************************/
-
+#ifndef ADC_DEBUG
+    if (ADC_Get_Value1.EabMeas>35 || ADC_Get_Value1.EabMeas<-35 || ADC_Get_Value1.IaMeas>4 || ADC_Get_Value1.IaMeas<-4 || ADC_Get_Value1.VdcMeas >50 || ADC_Get_Value1.VdcMeas <25)//
+//     //if (key1_test>10 || key1_test<-10)
+    {
+        Overcurrent_flag++;
+        if (Overcurrent_flag>2)
+        {
+        //GpioDataRegs.GPADAT.bit.GPIO8=0;
+        PWMDis_SS();
+        Button_flag=2;
+        Overcurrent_flag=0;
+        key4_test=1;
+        }
+    }
+#endif
 //         rampgen2.calc(&rampgen2);
         if (Ud>200) {Ud=0;}
         else        {Ud++;}
         //SOGI 杩愮畻
         filter1.in=ADC_Get_Value1.VdcMeas;
         filter1.calc(&filter1);
-
+#ifndef ADC_DEBUG
 /*******************On-Grid Start****************************************/
-//        rampgen1.Umax=22;//filter1.out*0.8;//Umag;
-//        rampgen1.calc(&rampgen1);
+       rampgen1.Umax=22;//filter1.out*0.8;//Umag;
+       rampgen1.calc(&rampgen1);
 /*******************On-Grid End****************************************/
+#endif
 
-
+#ifdef ADC_DEBUG
 /*******************Off-Grid Start****************************************/
         rampgen1.Umax=135;//filter1.out*0.8;//Umag;
         rampgen1.calc(&rampgen1);
 /*******************Off-Grid End****************************************/
+#endif
 
         if (filter1.out<5)
         {filter1.out=5;}
@@ -538,21 +541,23 @@ if(AdcRegs.ADCINTFLG.bit.ADCINT1)//浜х敓浜咥DC1涓柇
 //             data_test2=(-rampgen1.Sine*0.1/ADC_Get_Value1.VdcMeas+1)*0.5*4499;
 //             data_test1=(V_mod/36+1)*0.5*(EPWM1_TBPRD-1);
 //             data_test2=(-V_mod/36+1)*0.5*(EPWM1_TBPRD-1);
-
+#ifdef ADC_DEBUG
 /*******************Off-Grid Start****************************************/
              data_test1=(rampgen1.Sine/160+1)*0.5*(EPWM1_TBPRD-1);
              data_test2=(-rampgen1.Sine/160+1)*0.5*(EPWM1_TBPRD-1);
 /*******************Off-Grid End****************************************/
+#endif
 
+#ifndef ADC_DEBUG
 /*******************Connect-Grid Start****************************************/
-//             data_test1=(V_mod * rate+1)*0.5*(EPWM1_TBPRD-1)+data_test3;
-//             data_test2=(-V_mod * rate+1)*0.5*(EPWM1_TBPRD-1)-data_test3;
-//             if (data_test1>(EPWM1_TBPRD - 2)){data_test1=EPWM1_TBPRD - 2;}
-//             if (data_test1<2){data_test1=2;}
-//             if (data_test2>(EPWM1_TBPRD - 2)){data_test2=EPWM1_TBPRD - 2;}
-//             if (data_test2<2){data_test2=2;}
+            data_test1=(V_mod * rate+1)*0.5*(EPWM1_TBPRD-1)+data_test3;
+            data_test2=(-V_mod * rate+1)*0.5*(EPWM1_TBPRD-1)-data_test3;
+            if (data_test1>(EPWM1_TBPRD - 2)){data_test1=EPWM1_TBPRD - 2;}
+            if (data_test1<2){data_test1=2;}
+            if (data_test2>(EPWM1_TBPRD - 2)){data_test2=EPWM1_TBPRD - 2;}
+            if (data_test2<2){data_test2=2;}
 /*******************Connect-Grid Start****************************************/
-
+#endif
                  EPwm1Regs.CMPA.half.CMPA = (unsigned short)(data_test1);//(0.
                 // 5*(EPWM1_TBPRD-1));//data_test1;
                  EPwm2Regs.CMPA.half.CMPA = (unsigned short)(data_test2);
