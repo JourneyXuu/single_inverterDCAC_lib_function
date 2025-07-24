@@ -1,7 +1,7 @@
 ******************************************************************************
              TMS320C2000 Linker PC v22.6.1                     
 ******************************************************************************
->> Linked Wed Jul 23 14:43:06 2025
+>> Linked Wed Jul 23 22:09:48 2025
 
 OUTPUT FILE NAME:   <single_inverterDCAC_lib_function.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 003f6422
@@ -12,14 +12,14 @@ MEMORY CONFIGURATION
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
 PAGE 0:
-  RAML0                 00008000   00000800  000003c3  0000043d  RWIX
+  RAML0                 00008000   00000800  00000394  0000046c  RWIX
   RAML1                 00008800   00000400  00000019  000003e7  RWIX
   OTP                   003d7800   00000400  00000000  00000400  RWIX
   FLASHH                003d8000   00004000  00000000  00004000  RWIX
   FLASHG                003dc000   00004000  00000000  00004000  RWIX
   FLASHF                003e0000   00004000  00000000  00004000  RWIX
   FLASHE                003e4000   00004000  00000000  00004000  RWIX
-  FLASHD                003e8000   00004000  000003c3  00003c3d  RWIX
+  FLASHD                003e8000   00004000  00000394  00003c6c  RWIX
   FLASHC                003ec000   00004000  00001f34  000020cc  RWIX
   FLASHA                003f4000   00003f80  000029b1  000015cf  RWIX
   CSM_RSVD              003f7f80   00000076  00000076  00000000  RWIX
@@ -121,10 +121,10 @@ section   page    origin      length       input sections
 *          0    00008800    00000019     
                   00008800    00000019     rts2800_fpu32.lib : exit.obj (.text)
 
-ramfuncs   0    003e8000    000003c3     RUN ADDR = 00008000
-                  003e8000    000003a4     main.obj (ramfuncs:retain)
-                  003e83a4    0000001b     F2806x_SysCtrl.obj (ramfuncs)
-                  003e83bf    00000004     F2806x_usDelay.obj (ramfuncs)
+ramfuncs   0    003e8000    00000394     RUN ADDR = 00008000
+                  003e8000    00000375     main.obj (ramfuncs:retain)
+                  003e8375    0000001b     F2806x_SysCtrl.obj (ramfuncs)
+                  003e8390    00000004     F2806x_usDelay.obj (ramfuncs)
 
 .text      0    003f4000    000015ae     
                   003f4000    0000054a     OLED.obj (.text)
@@ -465,9 +465,9 @@ MODULE SUMMARY
        Module                          code    initialized data   uninitialized data
        ------                          ----    ----------------   ------------------
     .\
-       main.obj                        2527    749                1806              
+       main.obj                        2433    749                1806              
     +--+-------------------------------+-------+------------------+--------------------+
-       Total:                          2527    749                1806              
+       Total:                          2433    749                1806              
                                                                                     
     .\User\App\
        Adc.obj                         268     0                  0                 
@@ -561,7 +561,7 @@ MODULE SUMMARY
                                                                                     
        Stack:                          0       0                  1024              
     +--+-------------------------------+-------+------------------+--------------------+
-       Grand Total:                    11840   8895               6539              
+       Grand Total:                    11746   8895               6539              
 
 
 GLOBAL DATA SYMBOLS: SORTED BY DATA PAGE
@@ -861,7 +861,7 @@ page  address   name
 0     003f558b  _DMA_CH1_ISR         
 0     003f55a4  _DSP28x_DisableInt   
 0     003f55a8  _DSP28x_RestoreInt   
-0     000083bf  _DSP28x_usDelay      
+0     00008390  _DSP28x_usDelay      
 1     0000a9d8  _DT_com              
 1     00000880  _DevEmuRegs          
 0     003f4ba0  _DisableDog          
@@ -946,7 +946,7 @@ page  address   name
 0     003f4554  _INT14_ISR           
 1     0000a9f6  _I_Ang               
 1     0000a9d2  _Idref               
-0     000083a4  _InitFlash           
+0     00008375  _InitFlash           
 0     003f4c2a  _InitPeripheralClocks
 0     003f551e  _InitPieCtrl         
 0     003f5546  _InitPieVectTable    
@@ -1007,7 +1007,7 @@ page  address   name
 1     0000a9dc  _Q_ref               
 1     0000a9d0  _R                   
 0     003f4568  _RTOSINT_ISR         
-0     003e83c3  _RamfuncsLoadEnd     
+0     003e8394  _RamfuncsLoadEnd     
 0     003e8000  _RamfuncsLoadStart   
 0     00008000  _RamfuncsRunStart    
 1     0000a9cb  _RunFlag             
@@ -1167,13 +1167,13 @@ page  address   name
 ----  -------   ----                 
 0     00008000  _AdcISR              
 0     00008000  _RamfuncsRunStart    
-0     000083a4  _InitFlash           
-0     000083bf  _DSP28x_usDelay      
+0     00008375  _InitFlash           
+0     00008390  _DSP28x_usDelay      
 0     00008800  C$$EXIT              
 0     00008800  _abort               
 0     00008802  _exit                
 0     003e8000  _RamfuncsLoadStart   
-0     003e83c3  _RamfuncsLoadEnd     
+0     003e8394  _RamfuncsLoadEnd     
 0     003ec000  _asc2_2412           
 0     003ecd5c  _asc2_1608           
 0     003ed34c  _asc2_1206           

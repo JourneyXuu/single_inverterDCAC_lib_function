@@ -231,10 +231,8 @@ void main(void)
         {OLED_count++;}
         if(OLED_count == 1)
         {
-//            OLED_ShowFNum(33,0,ADC_Get_Value1.EabMeas,16,1);
-//            OLED_ShowFNum(33,16,ADC_Get_Value1.VdcMeas,16,1);
-//            OLED_ShowFNum(33,32,ADC_Get_Value1.IaMeas,16,1);
-            OLED_ShowFloat(33,0,filter2.out,16,1);
+            OLED_ShowFloat(33,0,ADC_Get_Value1.EabMeas,16,1);
+//            OLED_ShowFloat(33,0,filter2.out,16,1);
             OLED_ShowFloat(33,16,ADC_Get_Value1.VdcMeas,16,1);
             OLED_ShowFloat(33,32,ADC_Get_Value1.IaMeas,16,1);
             OLED_Refresh();//更新显示
@@ -310,19 +308,19 @@ interrupt void AdcISR(void)
 if(AdcRegs.ADCINTFLG.bit.ADCINT1)//产生了ADC1中断
 {
      ADC_Get_Value1.calc(&ADC_Get_Value1);
-     if (ADC_Get_Value1.EabMeas>35 || ADC_Get_Value1.EabMeas<-35 || ADC_Get_Value1.IaMeas>4 || ADC_Get_Value1.IaMeas<-4 || ADC_Get_Value1.VdcMeas >50 || ADC_Get_Value1.VdcMeas <25)//
-//     //if (key1_test>10 || key1_test<-10)
-     {
-         Overcurrent_flag++;
-         if (Overcurrent_flag>2)
-         {
-         //GpioDataRegs.GPADAT.bit.GPIO8=0;
-         PWMDis_SS();
-         Button_flag=2;
-         Overcurrent_flag=0;
-         key4_test=1;
-         }
-     }
+//     if (ADC_Get_Value1.EabMeas>35 || ADC_Get_Value1.EabMeas<-35 || ADC_Get_Value1.IaMeas>4 || ADC_Get_Value1.IaMeas<-4 || ADC_Get_Value1.VdcMeas >50 || ADC_Get_Value1.VdcMeas <25)//
+////     //if (key1_test>10 || key1_test<-10)
+//     {
+//         Overcurrent_flag++;
+//         if (Overcurrent_flag>2)
+//         {
+//         //GpioDataRegs.GPADAT.bit.GPIO8=0;
+//         PWMDis_SS();
+//         Button_flag=2;
+//         Overcurrent_flag=0;
+//         key4_test=1;
+//         }
+//     }
 
 //         rampgen2.calc(&rampgen2);
         if (Ud>200) {Ud=0;}
